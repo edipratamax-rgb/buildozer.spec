@@ -8,18 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      # ANDROID SDK RESMI
+      # ✅ Android SDK resmi + auto license
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # INSTALL BUILD TOOLS (INI KUNCI AIDL)
-      - name: Install Android build-tools & platform-tools
+      # ✅ Install build-tools yang SAMA dengan buildozer.spec
+      - name: Install Android build-tools
         run: |
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
           yes | sdkmanager --licenses
