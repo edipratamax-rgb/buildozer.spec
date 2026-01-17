@@ -11,10 +11,9 @@ requirements = python3,kivy
 
 orientation = portrait
 fullscreen = 1
-
 android.permissions = INTERNET
 
-# 🔒 KUNCI VERSI ANDROID (INI PENTING)
+# 🔒 PAKSA VERSI STABIL (JANGAN 36)
 android.api = 33
 android.sdk = 33
 android.ndk = 25b
