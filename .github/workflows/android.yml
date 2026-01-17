@@ -8,11 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -25,10 +23,14 @@ jobs:
             python3-pip python3-setuptools \
             python3-wheel build-essential
 
-      - name: Install Buildozer
+      - name: Install Buildozer & Cython
         run: |
           pip install --upgrade pip
           pip install buildozer cython
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | buildozer android sdk accept
 
       - name: Build APK
         run: |
