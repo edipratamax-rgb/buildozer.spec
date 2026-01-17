@@ -16,12 +16,10 @@ jobs:
         with:
           python-version: '3.10'
 
-      # ✅ Android SDK resmi + auto license
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # ✅ Install build-tools yang SAMA dengan buildozer.spec
-      - name: Install Android build-tools
+      - name: Install Android SDK components
         run: |
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
           yes | sdkmanager --licenses
@@ -35,7 +33,7 @@ jobs:
             python3-pip python3-setuptools \
             python3-wheel build-essential
 
-      - name: Install Buildozer & Cython
+      - name: Install Buildozer
         run: |
           pip install --upgrade pip
           pip install buildozer cython
