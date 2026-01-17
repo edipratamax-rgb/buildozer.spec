@@ -28,9 +28,17 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
+      # STEP PENTING: trigger buildozer supaya SDK & cmdline-tools dibuat
+      - name: Initialize Android SDK (Buildozer)
+        run: |
+          buildozer android help || true
+
+      # STEP PALING PENTING: accept license dari lokasi SDK YANG SUDAH ADA
+      - name: Accept Android SDK licenses
+        run: |
+          yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
       - name: Build APK
-        env:
-          ANDROIDSDK_ACCEPT_LICENSES: yes
         run: |
           buildozer android debug
 
