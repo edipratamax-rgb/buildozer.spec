@@ -5,45 +5,51 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          zip unzip openjdk-17-jdk \
+          python3-pip git \
+          libffi-dev libssl-dev \
+          autoconf automake libtool pkg-config \
+          zlib1g-dev
 
-      - name: Install Android SDK components
-        run: |
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-          yes | sdkmanager --licenses
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v3
 
-      - name: Install system dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y \
-            git zip unzip openjdk-17-jdk \
-            libffi-dev libssl-dev \
-            python3-pip python3-setuptools \
-            python3-wheel build-essential
+    - name: Accept Android licenses
+      run: yes | sdkmanager --licenses
 
-      - name: Install Buildozer
-        run: |
-          pip install --upgrade pip
-          pip install buildozer cython
+    - name: Install required SDK packages
+      run: |
+        sdkmanager \
+          "platforms;android-33" \
+          "build-tools;33.0.2" \
+          "platform-tools"
 
-      - name: Build APK
-        run: |
-          buildozer android debug
+    - name: Install Buildozer
+      run: |
+        pip install --upgrade pip
+        pip install cython==0.29.36 buildozer
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: APK
-          path: bin/*.apk
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: apk
+        path: bin/*.apk
